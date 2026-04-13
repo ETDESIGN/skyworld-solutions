@@ -119,12 +119,12 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
             : 'bg-transparent'
           }`}
       >
-        <div className="w-full px-4 lg:px-12 xl:px-20">
+        <div className="w-full pl-2 pr-4 lg:px-8 xl:px-12">
           <div className="flex items-center justify-between h-36 sm:h-40 lg:h-40">
             <motion.a
               href="#home"
               onClick={(e) => onNavClick(e, 'home')}
-              className="flex-shrink-0"
+              className="flex-shrink-0 -ml-1 lg:ml-0"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
