@@ -68,8 +68,8 @@ export default function Projects({ translations }: ProjectsProps) {
         <section id="projects" className="relative py-24 lg:py-32 bg-white dark:bg-slate-950">
             {/* Background Pattern */}
             <div className="absolute inset-0">
-                <div className="absolute inset-0 opacity-[0.03]" style={{
-                    backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+                <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.03]" style={{
+                    backgroundImage: `linear-gradient(rgb(203 213 225) 1px, transparent 1px), linear-gradient(90deg, rgb(203 213 225) 1px, transparent 1px)`,
                     backgroundSize: '50px 50px'
                 }} />
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-700 to-transparent" />

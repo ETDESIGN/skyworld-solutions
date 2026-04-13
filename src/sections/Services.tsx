@@ -61,9 +61,9 @@ export default function Services({ translations }: ServicesProps) {
   return (
     <section id="services" className="relative py-24 lg:py-32 bg-slate-50 dark:bg-slate-900">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-5 dark:opacity-5">
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgb(148 163 184) 1px, transparent 0)`,
           backgroundSize: '40px 40px'
         }} />
       </div>

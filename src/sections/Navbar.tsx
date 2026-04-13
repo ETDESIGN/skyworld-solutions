@@ -26,6 +26,8 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
 
+  const isOverHero = !isScrolled;
+
   useEffect(() => {
     let ticking = false;
     const sections = ['home', 'services', 'projects', 'about', 'faq', 'contact'];
@@ -117,8 +119,8 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
             : 'bg-transparent'
           }`}
       >
-        <div className="w-full px-6 lg:px-12 xl:px-20">
-          <div className="flex items-center justify-between h-32 lg:h-36">
+        <div className="w-full px-4 lg:px-12 xl:px-20">
+          <div className="flex items-center justify-between h-20 lg:h-28">
             <motion.a
               href="#home"
               onClick={(e) => onNavClick(e, 'home')}
@@ -130,8 +132,8 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
                 <img
                   src="https://skyworld-solutions.com/IMAGES/SKYWORLD_SOLUTIONS.png"
                   alt="Skyworld Solutions"
-                  className="relative h-32 lg:h-36 w-auto object-contain drop-shadow-lg"
-                  style={{ filter: resolvedTheme === 'dark' ? 'brightness(0) invert(1)' : 'none' }}
+                  className="relative h-16 sm:h-20 lg:h-24 w-auto object-contain"
+                  style={{ filter: (isOverHero || resolvedTheme === 'dark') ? 'brightness(0) invert(1)' : 'none' }}
                   onError={handleImgError}
                 />
               </div>
@@ -149,10 +151,13 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 + index * 0.05, duration: 0.5 }}
                   >
-                    <span className={activeSection === link.key ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-white/70 hover:text-slate-900 dark:hover:text-white'}>
+                    <span className={isOverHero
+                        ? (activeSection === link.key ? 'text-white' : 'text-white/70 hover:text-white')
+                        : (activeSection === link.key ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-white/70 hover:text-slate-900 dark:hover:text-white')
+                      }>
                       {link.label}
                     </span>
-                    <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-cyan-600 to-blue-500 dark:from-cyan-400 dark:to-blue-500 transition-all duration-300 ${activeSection === link.key ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                    <span className={`absolute -bottom-1 left-0 h-0.5 transition-all duration-300 ${isOverHero ? 'bg-gradient-to-r from-cyan-400 to-blue-400' : 'bg-gradient-to-r from-cyan-600 to-blue-500 dark:from-cyan-400 dark:to-blue-500'} ${activeSection === link.key ? 'w-full' : 'w-0 group-hover:w-full'}`} />
                   </motion.a>
                 ))}
               </div>
@@ -161,7 +166,10 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
             <div className="hidden lg:flex items-center space-x-3">
               <motion.button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg text-slate-600 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-300"
+                className={`p-2 rounded-lg transition-colors duration-300 ${isOverHero
+                    ? 'text-white/70 hover:text-white hover:bg-white/10'
+                    : 'text-slate-600 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label="Toggle theme"
@@ -170,7 +178,7 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
               </motion.button>
               <motion.button
                 onClick={() => setLanguage('en')}
-                className={`relative w-8 h-6 rounded overflow-hidden transition-all duration-300 ${language === 'en' ? 'ring-2 ring-cyan-600 dark:ring-cyan-400 ring-offset-2 ring-offset-white dark:ring-offset-slate-900' : 'opacity-60 hover:opacity-100'}`}
+                className={`relative w-8 h-6 rounded overflow-hidden transition-all duration-300 ${language === 'en' ? `ring-2 ring-cyan-600 dark:ring-cyan-400 ring-offset-2 ${isOverHero ? 'ring-offset-transparent' : 'ring-offset-white dark:ring-offset-slate-900'}` : `${isOverHero ? 'opacity-80 hover:opacity-100' : 'opacity-60 hover:opacity-100'}`}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label="English"
@@ -179,7 +187,7 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
               </motion.button>
               <motion.button
                 onClick={() => setLanguage('fr')}
-                className={`relative w-8 h-6 rounded overflow-hidden transition-all duration-300 ${language === 'fr' ? 'ring-2 ring-cyan-600 dark:ring-cyan-400 ring-offset-2 ring-offset-white dark:ring-offset-slate-900' : 'opacity-60 hover:opacity-100'}`}
+                className={`relative w-8 h-6 rounded overflow-hidden transition-all duration-300 ${language === 'fr' ? `ring-2 ring-cyan-600 dark:ring-cyan-400 ring-offset-2 ${isOverHero ? 'ring-offset-transparent' : 'ring-offset-white dark:ring-offset-slate-900'}` : `${isOverHero ? 'opacity-80 hover:opacity-100' : 'opacity-60 hover:opacity-100'}`}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label="Français"
@@ -190,7 +198,7 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
 
             <motion.button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-900 dark:text-white"
+              className={`lg:hidden p-2 ${isOverHero ? 'text-white' : 'text-slate-900 dark:text-white'}`}
               whileTap={{ scale: 0.95 }}
               aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
@@ -219,7 +227,17 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed top-0 right-0 bottom-0 w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-l border-slate-200 dark:border-slate-700/50 z-50 lg:hidden"
             >
-              <div className="pt-24 px-6">
+              <div className="pt-20 px-6">
+                <div className="flex items-center justify-center mb-8">
+                  <img
+                    src="https://skyworld-solutions.com/IMAGES/SKYWORLD_SOLUTIONS.png"
+                    alt="Skyworld Solutions"
+                    className="h-14 w-auto object-contain"
+                    style={{ filter: resolvedTheme === 'dark' ? 'brightness(0) invert(1)' : 'none' }}
+                    onError={handleImgError}
+                  />
+                </div>
+
                 <div className="space-y-2">
                   {navLinks.map((link, index) => (
                     <motion.a
@@ -230,7 +248,7 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
                       className={`block text-lg font-medium py-3 px-4 rounded-lg transition-all duration-300 ${activeSection === link.key
-                          ? 'text-cyan-600 dark:text-cyan-400 bg-cyan-400/10'
+                          ? 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-400/10'
                           : 'text-slate-700 dark:text-white/80 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                         }`}
                     >
