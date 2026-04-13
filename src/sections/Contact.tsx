@@ -298,7 +298,7 @@ export default function Contact({ translations }: ContactProps) {
             <div className="p-6 rounded-2xl bg-white dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700/50">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
-                  <Building2 className="w-6 h-6 text-cyan-400" />
+                  <Building2 className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
@@ -331,7 +331,7 @@ export default function Contact({ translations }: ContactProps) {
             <div className="p-6 rounded-2xl bg-white dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700/50">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-6 h-6 text-cyan-400" />
+                  <MapPin className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">

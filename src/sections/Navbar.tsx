@@ -202,7 +202,7 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
               whileTap={{ scale: 0.95 }}
               aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </motion.button>
           </div>
         </div>
@@ -232,7 +232,7 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
                   <img
                     src="https://skyworld-solutions.com/IMAGES/SKYWORLD_SOLUTIONS.png"
                     alt="Skyworld Solutions"
-                    className="h-14 w-auto object-contain"
+                      className="h-20 w-auto object-contain"
                     style={{ filter: resolvedTheme === 'dark' ? 'brightness(0) invert(1)' : 'none' }}
                     onError={handleImgError}
                   />

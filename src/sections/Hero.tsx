@@ -63,7 +63,7 @@ export default function Hero({ translations }: HeroProps) {
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-transparent to-cyan-900/10" />
       </motion.div>
 
-      <div className="relative z-10 flex items-center justify-center min-h-screen px-6 lg:px-12 xl:px-20 pt-24">
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-6 lg:px-12 xl:px-20 pt-36 sm:pt-40 lg:pt-40">
         <div className="w-full max-w-6xl mx-auto">
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="text-center">
             <motion.div variants={itemVariants} className="mb-8">

@@ -54,17 +54,17 @@ export default function Footer({ translations }: FooterProps) {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-center"
           >
-            <div className="flex items-center justify-center gap-6">
-              <a href="#home" onClick={(e) => scrollToSection(e, 'home')} className="text-slate-600 dark:text-slate-400 hover:text-cyan-400 transition-colors text-sm uppercase tracking-wider">
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+              <a href="#home" onClick={(e) => scrollToSection(e, 'home')}                 className="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors text-sm uppercase tracking-wider">
                 {translations.nav.home}
               </a>
-              <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="text-slate-600 dark:text-slate-400 hover:text-cyan-400 transition-colors text-sm uppercase tracking-wider">
+              <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors text-sm uppercase tracking-wider">
                 {translations.nav.services}
               </a>
-              <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="text-slate-600 dark:text-slate-400 hover:text-cyan-400 transition-colors text-sm uppercase tracking-wider">
+              <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors text-sm uppercase tracking-wider">
                 {translations.nav.about}
               </a>
-              <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="text-slate-600 dark:text-slate-400 hover:text-cyan-400 transition-colors text-sm uppercase tracking-wider">
+              <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors text-sm uppercase tracking-wider">
                 {translations.nav.contact}
               </a>
             </div>
@@ -115,7 +115,7 @@ export default function Footer({ translations }: FooterProps) {
             </p>
             <a
               href="mailto:services-prestations@skyworld-solutions.com"
-              className="text-slate-400 dark:text-slate-500 hover:text-cyan-400 transition-colors text-sm"
+              className="text-slate-400 dark:text-slate-500 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors text-sm"
             >
               {translations.footer.privacy}
             </a>
