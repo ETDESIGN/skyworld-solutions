@@ -120,7 +120,7 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
           }`}
       >
         <div className="w-full px-4 lg:px-12 xl:px-20">
-          <div className="flex items-center justify-between h-28 sm:h-32 lg:h-28">
+          <div className="flex items-center justify-between h-36 sm:h-40 lg:h-40">
             <motion.a
               href="#home"
               onClick={(e) => onNavClick(e, 'home')}
@@ -132,7 +132,7 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
                 <img
                   src="https://skyworld-solutions.com/IMAGES/SKYWORLD_SOLUTIONS.png"
                   alt="Skyworld Solutions"
-                  className="relative h-24 sm:h-28 lg:h-24 w-auto object-contain"
+                  className="relative h-32 sm:h-36 lg:h-36 w-auto object-contain"
                   style={{ filter: (isOverHero || resolvedTheme === 'dark') ? 'brightness(0) invert(1)' : 'none' }}
                   onError={handleImgError}
                 />
