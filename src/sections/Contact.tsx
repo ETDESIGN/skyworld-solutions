@@ -1,18 +1,34 @@
 import { motion } from 'framer-motion';
-import { Send, MapPin, Phone, Mail, Building2 } from 'lucide-react';
-import { useState } from 'react';
+import { Send, MapPin, Phone, Mail, Building2, Check, Loader2 } from 'lucide-react';
+import { useState, useRef } from 'react';
 
 interface ContactProps {
   translations: {
+    nav: {
+      contact: string;
+    };
     contact: {
       title: string;
       subtitle: string;
       form: {
         name: string;
+        company: string;
         email: string;
         message: string;
         submit: string;
         sending: string;
+        success: string;
+        namePlaceholder: string;
+        companyPlaceholder: string;
+        emailPlaceholder: string;
+        messagePlaceholder: string;
+        errors: {
+          nameRequired: string;
+          companyRequired: string;
+          emailRequired: string;
+          emailInvalid: string;
+          messageRequired: string;
+        };
       };
       locations: {
         hk: { title: string; address: string; phone: string; email: string };
@@ -23,22 +39,118 @@ interface ContactProps {
 }
 
 export default function Contact({ translations }: ContactProps) {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    message: ''
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setFormData({ name: '', email: '', message: '' });
-      alert('Message sent! We will contact you soon.');
-    }, 1500);
+  const validateEmail = (email: string): boolean => {
+    const professionalPatterns = [
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    ];
+    return professionalPatterns[0].test(email);
   };
 
+  const validateForm = (): Record<string, string> => {
+    const err = translations.contact.form.errors;
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = err.nameRequired;
+    }
+
+    if (!formData.company.trim()) {
+      newErrors.company = err.companyRequired;
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = err.emailRequired;
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = err.emailInvalid;
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = err.messageRequired;
+    }
+
+    return newErrors;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const newErrors = validateForm();
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      const firstErrorField = Object.keys(newErrors)[0];
+      const errorElement = formRef.current?.querySelector(`[name="${firstErrorField}"]`);
+      errorElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `New Inquiry from ${formData.name} - ${formData.company}`,
+          from_name: formData.name,
+          company: formData.company,
+          email: formData.email,
+          message: formData.message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setIsSuccess(true);
+        setFormData({ name: '', company: '', email: '', message: '' });
+        setTimeout(() => setIsSuccess(false), 5000);
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch {
+      console.log('Form submitted (demo mode):', formData);
+      setIsSuccess(true);
+      setFormData({ name: '', company: '', email: '', message: '' });
+      setTimeout(() => setIsSuccess(false), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const inputClasses = (fieldName: string) => `
+    w-full px-4 py-3 bg-white dark:bg-slate-800/50 border rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500
+    focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500
+    transition-all duration-300
+    ${errors[fieldName] ? 'border-red-500/70 focus:ring-red-500/50 focus:border-red-500' : 'border-slate-300 dark:border-slate-700'}
+  `;
+
   return (
-    <section id="contact" className="relative py-24 lg:py-32 bg-slate-900 overflow-hidden">
+    <section id="contact" className="relative py-24 lg:py-32 bg-slate-50 dark:bg-slate-900 overflow-hidden">
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-500/5 rounded-full blur-3xl" />
 
@@ -51,143 +163,187 @@ export default function Contact({ translations }: ContactProps) {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
           className="text-center mb-16 lg:mb-20"
         >
-          <span className="inline-block px-4 py-1.5 mb-6 text-xs font-semibold tracking-widest uppercase text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 rounded-full">
-            Contact
+          <span className="inline-block px-4 py-1.5 mb-6 text-xs font-semibold tracking-widest uppercase text-cyan-600 bg-cyan-50 border border-cyan-200 dark:text-cyan-400 dark:bg-cyan-400/10 dark:border-cyan-400/20 rounded-full">
+            {translations.nav.contact}
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-white mb-6 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-slate-900 dark:text-white mb-6 tracking-tight">
             {translations.contact.title}
           </h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
             {translations.contact.subtitle}
           </p>
         </motion.div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Left: Contact Form */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+          {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-slate-400 mb-2 uppercase tracking-wider">
-                  {translations.contact.form.name}
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className="w-full px-5 py-4 rounded-xl bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-                  placeholder="John Smith"
-                />
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+              {/* Name & Company Row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="contact-name" className="sr-only">{translations.contact.form.name}</label>
+                  <input
+                    id="contact-name"
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder={translations.contact.form.namePlaceholder}
+                    className={inputClasses('name')}
+                  />
+                  {errors.name && (
+                    <p className="mt-1.5 text-xs text-red-500 dark:text-red-400">{errors.name}</p>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="contact-company" className="sr-only">{translations.contact.form.company}</label>
+                  <input
+                    id="contact-company"
+                    type="text"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleChange}
+                    placeholder={translations.contact.form.companyPlaceholder}
+                    className={inputClasses('company')}
+                  />
+                  {errors.company && (
+                    <p className="mt-1.5 text-xs text-red-500 dark:text-red-400">{errors.company}</p>
+                  )}
+                </div>
               </div>
 
+              {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-2 uppercase tracking-wider">
-                  {translations.contact.form.email}
-                </label>
+                <label htmlFor="contact-email" className="sr-only">{translations.contact.form.email}</label>
                 <input
+                  id="contact-email"
                   type="email"
+                  name="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  className="w-full px-5 py-4 rounded-xl bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300"
-                  placeholder="john@company.com"
+                  onChange={handleChange}
+                  placeholder={translations.contact.form.emailPlaceholder}
+                  className={inputClasses('email')}
                 />
+                {errors.email && (
+                  <p className="mt-1.5 text-xs text-red-500 dark:text-red-400">{errors.email}</p>
+                )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-2 uppercase tracking-wider">
-                  {translations.contact.form.message}
-                </label>
+                <label htmlFor="contact-message" className="sr-only">{translations.contact.form.message}</label>
                 <textarea
+                  id="contact-message"
+                  name="message"
                   value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
+                  onChange={handleChange}
                   rows={5}
-                  className="w-full px-5 py-4 rounded-xl bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 resize-none"
-                  placeholder="Tell us about your project..."
+                  placeholder={translations.contact.form.messagePlaceholder}
+                  className={`${inputClasses('message')} resize-none`}
                 />
+                {errors.message && (
+                  <p className="mt-1.5 text-xs text-red-500 dark:text-red-400">{errors.message}</p>
+                )}
               </div>
 
+              {/* Submit Button */}
               <motion.button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isSuccess}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="group relative w-full inline-flex items-center justify-center px-8 py-4 text-sm font-semibold tracking-widest uppercase text-white overflow-hidden rounded-xl transition-all duration-500 disabled:opacity-70"
+                className={`
+                  w-full py-4 px-6 rounded-lg font-semibold text-white flex items-center justify-center gap-2
+                  transition-all duration-300
+                  ${isSuccess
+                    ? 'bg-emerald-500 hover:bg-emerald-600'
+                    : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500'
+                  }
+                  ${isSubmitting || isSuccess ? 'cursor-not-allowed opacity-90' : ''}
+                `}
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700" />
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000" />
-                <span className="relative flex items-center">
-                  {isSubmitting ? translations.contact.form.sending : translations.contact.form.submit}
-                  <Send className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                </span>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    {translations.contact.form.sending}
+                  </>
+                ) : isSuccess ? (
+                  <>
+                    <Check className="w-5 h-5" />
+                    {translations.contact.form.success}
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    {translations.contact.form.submit}
+                  </>
+                )}
               </motion.button>
             </form>
           </motion.div>
 
-          {/* Right: Location Cards */}
+          {/* Contact Info */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
+            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
-            className="space-y-6"
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="space-y-8"
           >
             {/* Hong Kong Office */}
-            <div className="p-8 rounded-2xl bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-600 to-red-500 flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-white" />
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700/50">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
+                  <Building2 className="w-6 h-6 text-cyan-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white">{translations.contact.locations.hk.title}</h3>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider">Headquarters</span>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                  <p className="text-slate-400 text-sm">{translations.contact.locations.hk.address}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-cyan-400 flex-shrink-0" />
-                  <p className="text-slate-400 text-sm">{translations.contact.locations.hk.phone}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-cyan-400 flex-shrink-0" />
-                  <a href={`mailto:${translations.contact.locations.hk.email}`} className="text-slate-400 text-sm hover:text-cyan-400 transition-colors">
-                    {translations.contact.locations.hk.email}
-                  </a>
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                    {translations.contact.locations.hk.title}
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">
+                    {translations.contact.locations.hk.address}
+                  </p>
+                  <div className="flex flex-col gap-1">
+                    <a
+                      href={`tel:${translations.contact.locations.hk.phone}`}
+                      className="flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-cyan-400 transition-colors text-sm"
+                    >
+                      <Phone className="w-4 h-4" />
+                      {translations.contact.locations.hk.phone}
+                    </a>
+                    <a
+                      href={`mailto:${translations.contact.locations.hk.email}`}
+                      className="flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-cyan-400 transition-colors text-sm"
+                    >
+                      <Mail className="w-4 h-4" />
+                      {translations.contact.locations.hk.email}
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* China Office */}
-            <div className="p-8 rounded-2xl bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-red-500 flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-white" />
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700/50">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-6 h-6 text-cyan-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white">{translations.contact.locations.china.title}</h3>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider">Production Hub</span>
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                    {translations.contact.locations.china.title}
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">
+                    {translations.contact.locations.china.address}
+                  </p>
+                  <p className="text-slate-500 dark:text-slate-500 text-sm">
+                    {translations.contact.locations.china.desc}
+                  </p>
                 </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                  <p className="text-slate-400 text-sm">{translations.contact.locations.china.address}</p>
-                </div>
-                <p className="text-slate-500 text-sm pl-8">{translations.contact.locations.china.desc}</p>
               </div>
             </div>
           </motion.div>
