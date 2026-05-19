@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { scrollToSection } from '../utils/scrollToSection';
-import { handleImgError } from '../utils/handleImgError';
+import BlurImage from '../components/BlurImage';
 import { useThemeContext } from '../utils/themeContext';
 
 interface NavbarProps {
@@ -128,14 +128,13 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="relative">
-                <img
-                  src="https://skyworld-solutions.com/IMAGES/SKYWORLD_SOLUTIONS.png"
-                  alt="Skyworld Solutions"
-                  className="relative h-32 sm:h-36 lg:h-36 w-auto object-contain"
-                  style={{ filter: (isOverHero || resolvedTheme === 'dark') ? 'brightness(0) invert(1)' : 'none' }}
-                  onError={handleImgError}
-                />
+              <div className="relative">                  <BlurImage
+                    src="https://skyworld-solutions.com/IMAGES/SKYWORLD_SOLUTIONS.png"
+                    alt="Skyworld Solutions"
+                    className="h-32 sm:h-36 lg:h-36 w-auto object-contain"
+                    containerClassName="flex items-center"
+                    style={{ filter: (isOverHero || resolvedTheme === 'dark') ? 'brightness(0) invert(1)' : 'none' }}
+                  />
               </div>
             </motion.a>
 
@@ -228,14 +227,13 @@ export default function Navbar({ language, setLanguage, translations }: NavbarPr
               className="fixed top-0 right-0 bottom-0 w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-l border-slate-200 dark:border-slate-700/50 z-50 lg:hidden"
             >
               <div className="pt-20 px-6">
-                <div className="flex items-center justify-center mb-8">
-                  <img
-                    src="https://skyworld-solutions.com/IMAGES/SKYWORLD_SOLUTIONS.png"
-                    alt="Skyworld Solutions"
+                <div className="flex items-center justify-center mb-8">                    <BlurImage
+                      src="https://skyworld-solutions.com/IMAGES/SKYWORLD_SOLUTIONS.png"
+                      alt="Skyworld Solutions"
                       className="h-20 w-auto object-contain"
-                    style={{ filter: resolvedTheme === 'dark' ? 'brightness(0) invert(1)' : 'none' }}
-                    onError={handleImgError}
-                  />
+                      containerClassName="flex items-center justify-center"
+                      style={{ filter: resolvedTheme === 'dark' ? 'brightness(0) invert(1)' : 'none' }}
+                    />
                 </div>
 
                 <div className="space-y-2">

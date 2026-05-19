@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import BlurImage from '../components/BlurImage';
 
 interface ProjectsProps {
     translations: {
@@ -26,13 +27,6 @@ const FALLBACK_IMAGES = [
     'https://images.unsplash.com/photo-1567361808960-dec9cb578182?w=600&h=400&fit=crop&q=80',
     'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&h=400&fit=crop&q=80',
 ];
-
-const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>, fallbackIndex: number) => {
-    const img = e.currentTarget;
-    if (img.src !== FALLBACK_IMAGES[fallbackIndex]) {
-        img.src = FALLBACK_IMAGES[fallbackIndex];
-    }
-};
 
 export default function Projects({ translations }: ProjectsProps) {
     const projects = [
@@ -109,12 +103,11 @@ export default function Projects({ translations }: ProjectsProps) {
                         >
                             {/* Image Container */}
                             <div className="relative aspect-[3/2] overflow-hidden">
-                                <img
+                                <BlurImage
                                     src={project.image}
                                     alt={translations.projects.items[index]?.title || ''}
                                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-110 transition-all duration-700 ease-out"
-                                    loading="lazy"
-                                    onError={(e) => handleImgError(e, index)}
+                                    fallback={FALLBACK_IMAGES[index]}
                                 />
 
                                 <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-950 via-white/50 dark:via-slate-950/50 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />

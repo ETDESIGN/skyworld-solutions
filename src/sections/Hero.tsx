@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { ArrowRight, Mail } from 'lucide-react';
 import { scrollToSection } from '../utils/scrollToSection';
+import BlurImage from '../components/BlurImage';
 
 const HERO_FALLBACK = 'https://images.unsplash.com/photo-1565193566307-fa97b862b7e0?w=1920&h=1080&fit=crop&q=80';
 
@@ -51,12 +52,13 @@ export default function Hero({ translations }: HeroProps) {
   return (
     <section id="home" ref={sectionRef} className="relative min-h-screen w-full overflow-hidden">
       <motion.div style={{ y }} className="absolute inset-0 z-0">
-        <img
+        <BlurImage
           src="https://skyworld-solutions.com/IMAGES/001.jpg"
           alt="Precision Manufacturing"
           className="w-full h-[120%] object-cover"
+          containerClassName="absolute inset-0"
           fetchPriority="high"
-          onError={(e) => { if (e.currentTarget.src !== HERO_FALLBACK) e.currentTarget.src = HERO_FALLBACK; }}
+          fallback={HERO_FALLBACK}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-900/30 dark:from-slate-900/90 dark:via-slate-900/70 dark:to-slate-900/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-slate-900/20 dark:from-slate-900/80 dark:via-transparent dark:to-slate-900/30" />

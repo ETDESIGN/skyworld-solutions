@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Linkedin, Mail, Phone } from 'lucide-react';
 import { scrollToSection } from '../utils/scrollToSection';
-import { handleImgError } from '../utils/handleImgError';
+import BlurImage from '../components/BlurImage';
 import { useThemeContext } from '../utils/themeContext';
 
 interface FooterProps {
@@ -45,12 +45,12 @@ export default function Footer({ translations }: FooterProps) {
             transition={{ duration: 0.6 }}
             className="text-center md:text-left"
           >
-            <img
+            <BlurImage
               src="https://skyworld-solutions.com/IMAGES/SKYWORLD_SOLUTIONS.png"
               alt="Skyworld Solutions"
               className="h-40 w-auto mx-auto md:mx-0 mb-4"
+              containerClassName="flex"
               style={{ filter: resolvedTheme === 'dark' ? 'brightness(0) invert(1)' : 'none' }}
-              onError={handleImgError}
             />
             <p className="text-slate-400 dark:text-slate-500 text-sm">{translations.footer.tagline}</p>
           </motion.div>

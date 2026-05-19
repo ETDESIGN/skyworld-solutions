@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { Shield, Leaf, Award } from 'lucide-react';
-import { handleImgError } from '../utils/handleImgError';
+import BlurImage from '../components/BlurImage';
 
 interface AboutProps {
   translations: {
@@ -55,12 +55,11 @@ export default function About({ translations }: AboutProps) {
           >
             <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-slate-300/50 dark:shadow-slate-900/50">
               <motion.div style={{ y }}>
-                <img
+                <BlurImage
                   src="https://skyworld-solutions.com/IMAGES/010.jpg"
                   alt="Precision Manufacturing"
                   className="w-full h-[420px] lg:h-[520px] object-cover"
-                  loading="lazy"
-                  onError={(e) => handleImgError(e, ABOUT_FALLBACK)}
+                  fallback={ABOUT_FALLBACK}
                 />
               </motion.div>
               {/* Image Overlay Gradient */}
