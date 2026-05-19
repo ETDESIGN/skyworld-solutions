@@ -12,6 +12,14 @@ interface FooterProps {
       about: string;
       contact: string;
     };
+    contact: {
+      locations: {
+        hk: {
+          phone: string;
+          email: string;
+        };
+      };
+    };
     footer: {
       rights: string;
       privacy: string;
@@ -79,13 +87,13 @@ export default function Footer({ translations }: FooterProps) {
           >
             <div className="flex items-center justify-center md:justify-end gap-4">
               <a
-                href="mailto:services-prestations@skyworld-solutions.com"
+                href={`mailto:${translations.contact.locations.hk.email}`}
                 className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-300 dark:hover:bg-slate-700 transition-all duration-300"
               >
                 <Mail className="w-5 h-5" />
               </a>
               <a
-                href="tel:+85234283032"
+                href={`tel:${translations.contact.locations.hk.phone.replace(/[\s()]/g, '')}`}
                 className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-300 dark:hover:bg-slate-700 transition-all duration-300"
               >
                 <Phone className="w-5 h-5" />
@@ -114,7 +122,7 @@ export default function Footer({ translations }: FooterProps) {
               © {year} Skyworld Solutions. {translations.footer.rights}
             </p>
             <a
-              href="mailto:services-prestations@skyworld-solutions.com"
+              href={`mailto:${translations.contact.locations.hk.email}`}
               className="text-slate-400 dark:text-slate-500 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors text-sm"
             >
               {translations.footer.privacy}

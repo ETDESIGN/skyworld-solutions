@@ -19,27 +19,12 @@ function App() {
     const saved = localStorage.getItem('sws_language');
     return (saved === 'en' || saved === 'fr') ? saved : 'en';
   });
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 300);
-    return () => clearTimeout(timer);
-  }, []);
-
   useEffect(() => {
     document.documentElement.lang = language;
     localStorage.setItem('sws_language', language);
   }, [language]);
 
   const currentTranslations = translations[language];
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center">
-        <div className="w-12 h-12 border-2 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <ThemeContext.Provider value={theme}>

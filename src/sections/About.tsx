@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { Shield, Leaf, Award } from 'lucide-react';
+import { handleImgError } from '../utils/handleImgError';
 
 interface AboutProps {
   translations: {
@@ -22,9 +23,7 @@ interface AboutProps {
   };
 }
 
-const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = 'https://images.unsplash.com/photo-1565193566307-fa97b862b7e0?w=600&h=400&fit=crop&q=80';
-};
+const ABOUT_FALLBACK = 'https://images.unsplash.com/photo-1565193566307-fa97b862b7e0?w=600&h=400&fit=crop&q=80';
 
 export default function About({ translations }: AboutProps) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -61,7 +60,7 @@ export default function About({ translations }: AboutProps) {
                   alt="Precision Manufacturing"
                   className="w-full h-[420px] lg:h-[520px] object-cover"
                   loading="lazy"
-                  onError={handleImgError}
+                  onError={(e) => handleImgError(e, ABOUT_FALLBACK)}
                 />
               </motion.div>
               {/* Image Overlay Gradient */}
