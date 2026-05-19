@@ -58,6 +58,7 @@ export default function Hero({ translations }: HeroProps) {
           className="w-full h-[120%] object-cover"
           containerClassName="absolute inset-0"
           fetchPriority="high"
+          sizes="100vw"
           fallback={HERO_FALLBACK}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-900/30 dark:from-slate-900/90 dark:via-slate-900/70 dark:to-slate-900/40" />

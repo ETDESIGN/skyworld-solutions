@@ -17,15 +17,15 @@ interface ProjectsProps {
 }
 
 const FALLBACK_IMAGES = [
-    'https://images.unsplash.com/photo-1565193566307-fa97b862b7e0?w=600&h=400&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1567361808960-dec9cb578182?w=600&h=400&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&h=400&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1572981779307-38b216224049?w=600&h=400&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1565193566307-fa97b862b7e0?w=600&h=400&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1567361808960-dec9cb578182?w=600&h=400&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1565193566307-fa97b862b7e0?w=600&h=400&fit=crop&q=80&fm=webp',
+    'https://images.unsplash.com/photo-1567361808960-dec9cb578182?w=600&h=400&fit=crop&q=80&fm=webp',
+    'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&h=400&fit=crop&q=80&fm=webp',
+    'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop&q=80&fm=webp',
+    'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop&q=80&fm=webp',
+    'https://images.unsplash.com/photo-1572981779307-38b216224049?w=600&h=400&fit=crop&q=80&fm=webp',
+    'https://images.unsplash.com/photo-1565193566307-fa97b862b7e0?w=600&h=400&fit=crop&q=80&fm=webp',
+    'https://images.unsplash.com/photo-1567361808960-dec9cb578182?w=600&h=400&fit=crop&q=80&fm=webp',
+    'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&h=400&fit=crop&q=80&fm=webp',
 ];
 
 export default function Projects({ translations }: ProjectsProps) {
@@ -35,10 +35,9 @@ export default function Projects({ translations }: ProjectsProps) {
         { category: 'stamping', image: 'https://skyworld-solutions.com/IMAGES/004.jpg' },
         { category: 'cnc', image: 'https://skyworld-solutions.com/IMAGES/005.jpg' },
         { category: 'subsystems', image: 'https://skyworld-solutions.com/IMAGES/006.jpg' },
-        { category: 'stamping', image: 'https://skyworld-solutions.com/IMAGES/007.jpg' },
-        { category: 'cnc', image: 'https://images.unsplash.com/photo-1565193566307-fa97b862b7e0?w=600&h=400&fit=crop&q=80' },
-        { category: 'subsystems', image: 'https://images.unsplash.com/photo-1567361808960-dec9cb578182?w=600&h=400&fit=crop&q=80' },
-        { category: 'cnc', image: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&h=400&fit=crop&q=80' },
+        { category: 'stamping', image: 'https://skyworld-solutions.com/IMAGES/007.jpg' },        {category: 'cnc', image: 'https://images.unsplash.com/photo-1565193566307-fa97b862b7e0?w=600&h=400&fit=crop&q=80&fm=webp' },
+        { category: 'subsystems', image: 'https://images.unsplash.com/photo-1567361808960-dec9cb578182?w=600&h=400&fit=crop&q=80&fm=webp' },
+        { category: 'cnc', image: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&h=400&fit=crop&q=80&fm=webp' },
     ];
 
     const containerVariants = {
@@ -107,6 +106,9 @@ export default function Projects({ translations }: ProjectsProps) {
                                     src={project.image}
                                     alt={translations.projects.items[index]?.title || ''}
                                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-110 transition-all duration-700 ease-out"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                    width={600}
+                                    height={400}
                                     fallback={FALLBACK_IMAGES[index]}
                                 />
 

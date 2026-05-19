@@ -59,6 +59,7 @@ export default function About({ translations }: AboutProps) {
                   src="https://skyworld-solutions.com/IMAGES/010.jpg"
                   alt="Precision Manufacturing"
                   className="w-full h-[420px] lg:h-[520px] object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   fallback={ABOUT_FALLBACK}
                 />
               </motion.div>
