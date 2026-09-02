@@ -2,6 +2,6 @@ export const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionI
   e.preventDefault();
   const section = document.getElementById(sectionId);
   if (section) {
-    window.scrollTo({ top: section.offsetTop - 80, behavior: 'smooth' });
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 };

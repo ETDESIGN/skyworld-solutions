@@ -2,30 +2,16 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { Shield, Leaf, Award } from 'lucide-react';
 import BlurImage from '../components/BlurImage';
+import type { Translation } from '../i18n/translations';
 
 interface AboutProps {
-  translations: {
-    about: {
-      title: string;
-      headline: string;
-      description: string;
-      standards: string;
-      packaging: string;
-      since: string;
-      standardsTitle: string;
-      ecoTitle: string;
-      stats: {
-        years: string;
-        clients: string;
-        countries: string;
-      };
-    };
-  };
+  translations: Translation;
 }
 
-const ABOUT_FALLBACK = 'https://images.unsplash.com/photo-1565193566307-fa97b862b7e0?w=600&h=400&fit=crop&q=80';
+const ABOUT_FALLBACK =
+  'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop&q=80';
 
-export default function About({ translations }: AboutProps) {
+export default function About({ translations: t }: AboutProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -34,13 +20,20 @@ export default function About({ translations }: AboutProps) {
 
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '-10%']);
   return (
-    <section id="about" ref={sectionRef} className="relative py-24 lg:py-32 bg-slate-50 dark:bg-slate-950 overflow-hidden">
+    <section
+      id="about"
+      ref={sectionRef}
+      className="relative py-24 lg:py-32 bg-slate-50 dark:bg-slate-950 overflow-hidden scroll-mt-40"
+    >
       {/* Subtle Grid Background */}
       <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.03]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(to right, rgb(203 213 225) 1px, transparent 1px), linear-gradient(to bottom, rgb(203 213 225) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgb(203 213 225) 1px, transparent 1px), linear-gradient(to bottom, rgb(203 213 225) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px',
+          }}
+        />
       </div>
 
       <div className="relative z-10 w-full px-6 lg:px-12 xl:px-20">
@@ -56,8 +49,8 @@ export default function About({ translations }: AboutProps) {
             <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-slate-300/50 dark:shadow-slate-900/50">
               <motion.div style={{ y }}>
                 <BlurImage
-                  src="https://skyworld-solutions.com/IMAGES/010.jpg"
-                  alt="Precision Manufacturing"
+                  src="/images/010.jpg"
+                  alt={t.about.headline}
                   className="w-full h-[420px] lg:h-[520px] object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   fallback={ABOUT_FALLBACK}
@@ -79,8 +72,8 @@ export default function About({ translations }: AboutProps) {
                     <Award className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-slate-900 dark:text-white font-semibold">{translations.about.stats.years}</p>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">{translations.about.since}</p>
+                    <p className="text-slate-900 dark:text-white font-semibold">{t.about.stats.yearsLabel}</p>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm">{t.about.since}</p>
                   </div>
                 </div>
               </motion.div>
@@ -99,15 +92,15 @@ export default function About({ translations }: AboutProps) {
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] as const }}
           >
             <span className="inline-block px-4 py-1.5 mb-6 text-xs font-semibold tracking-widest uppercase text-cyan-600 bg-cyan-50 border border-cyan-200 dark:text-cyan-400 dark:bg-cyan-400/10 dark:border-cyan-400/20 rounded-full">
-              {translations.about.title}
+              {t.about.title}
             </span>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-slate-900 dark:text-white mb-6 tracking-tight leading-tight">
-              {translations.about.headline}
+              {t.about.headline}
             </h2>
 
             <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-              {translations.about.description}
+              {t.about.description}
             </p>
 
             {/* Quality Points */}
@@ -123,8 +116,10 @@ export default function About({ translations }: AboutProps) {
                   <Shield className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
                 </div>
                 <div>
-                  <h4 className="text-slate-900 dark:text-white font-medium mb-1">{translations.about.standardsTitle}</h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm">{translations.about.standards}</p>
+                  <h4 className="text-slate-900 dark:text-white font-medium mb-1">
+                    {t.about.standardsTitle}
+                  </h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">{t.about.standards}</p>
                 </div>
               </motion.div>
 
@@ -139,25 +134,37 @@ export default function About({ translations }: AboutProps) {
                   <Leaf className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div>
-                  <h4 className="text-slate-900 dark:text-white font-medium mb-1">{translations.about.ecoTitle}</h4>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm">{translations.about.packaging}</p>
+                  <h4 className="text-slate-900 dark:text-white font-medium mb-1">{t.about.ecoTitle}</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">{t.about.packaging}</p>
                 </div>
               </motion.div>
             </div>
 
-            {/* Stats */}
+            {/* Stats — numbers live in translations so they stay consistent */}
             <div className="grid grid-cols-3 gap-6 pt-6 border-t border-slate-200 dark:border-slate-800">
               <div className="text-center">
-                <p className="text-3xl lg:text-4xl font-light text-cyan-600 dark:text-cyan-400 mb-1">14+</p>
-                <p className="text-slate-400 dark:text-slate-500 text-sm uppercase tracking-wider">{translations.about.stats.years}</p>
+                <p className="text-3xl lg:text-4xl font-light text-cyan-600 dark:text-cyan-400 mb-1">
+                  {t.about.stats.years}
+                </p>
+                <p className="text-slate-400 dark:text-slate-500 text-sm uppercase tracking-wider">
+                  {t.about.stats.yearsLabel}
+                </p>
               </div>
               <div className="text-center">
-                <p className="text-3xl lg:text-4xl font-light text-cyan-600 dark:text-cyan-400 mb-1">200+</p>
-                <p className="text-slate-400 dark:text-slate-500 text-sm uppercase tracking-wider">{translations.about.stats.clients}</p>
+                <p className="text-3xl lg:text-4xl font-light text-cyan-600 dark:text-cyan-400 mb-1">
+                  {t.about.stats.clients}
+                </p>
+                <p className="text-slate-400 dark:text-slate-500 text-sm uppercase tracking-wider">
+                  {t.about.stats.clientsLabel}
+                </p>
               </div>
               <div className="text-center">
-                <p className="text-3xl lg:text-4xl font-light text-cyan-600 dark:text-cyan-400 mb-1">30+</p>
-                <p className="text-slate-400 dark:text-slate-500 text-sm uppercase tracking-wider">{translations.about.stats.countries}</p>
+                <p className="text-3xl lg:text-4xl font-light text-cyan-600 dark:text-cyan-400 mb-1">
+                  {t.about.stats.countries}
+                </p>
+                <p className="text-slate-400 dark:text-slate-500 text-sm uppercase tracking-wider">
+                  {t.about.stats.countriesLabel}
+                </p>
               </div>
             </div>
           </motion.div>

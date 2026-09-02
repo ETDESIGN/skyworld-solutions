@@ -83,7 +83,9 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
-    font-feature-settings: "kern" 1, "liga" 1;
+    font-feature-settings:
+      'kern' 1,
+      'liga' 1;
   }
 }
 
@@ -118,7 +120,8 @@
 }
 
 /* Button hover enhancements */
-button:not([data-framer-motion]):hover, .btn:not([data-framer-motion]):hover {
+button:not([data-framer-motion]):hover,
+.btn:not([data-framer-motion]):hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateY(-1px);
 }

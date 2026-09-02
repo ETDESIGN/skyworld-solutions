@@ -1,0 +1,14 @@
+{
+  "name": "Skyworld Solutions",
+  "short_name": "SWS",
+  "icons": [
+    {
+      "src": "/android-chrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#0f172a",
+  "background_color": "#0f172a",
+  "display": "standout"
+}

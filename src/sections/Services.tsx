@@ -1,41 +1,30 @@
 import { motion } from 'framer-motion';
 import { Settings, Box, Wrench, Globe } from 'lucide-react';
+import type { Translation } from '../i18n/translations';
 
 interface ServicesProps {
-  translations: {
-    services: {
-      badge: string;
-      title: string;
-      subtitle: string;
-      cards: {
-        process: { title: string; desc: string };
-        prototyping: { title: string; desc: string };
-        fabrication: { title: string; desc: string };
-        logistics: { title: string; desc: string };
-      };
-    };
-  };
+  translations: Translation;
 }
 
-export default function Services({ translations }: ServicesProps) {
+export default function Services({ translations: t }: ServicesProps) {
   const services = [
     {
-      key: 'process',
+      key: 'process' as const,
       icon: Settings,
       gradient: 'from-blue-500 to-cyan-400',
     },
     {
-      key: 'prototyping',
+      key: 'prototyping' as const,
       icon: Box,
       gradient: 'from-cyan-400 to-teal-400',
     },
     {
-      key: 'fabrication',
+      key: 'fabrication' as const,
       icon: Wrench,
       gradient: 'from-teal-400 to-emerald-400',
     },
     {
-      key: 'logistics',
+      key: 'logistics' as const,
       icon: Globe,
       gradient: 'from-emerald-400 to-blue-500',
     },
@@ -59,13 +48,16 @@ export default function Services({ translations }: ServicesProps) {
   };
 
   return (
-    <section id="services" className="relative py-24 lg:py-32 bg-slate-50 dark:bg-slate-900">
+    <section id="services" className="relative py-24 lg:py-32 bg-slate-50 dark:bg-slate-900 scroll-mt-40">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5 dark:opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgb(148 163 184) 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, rgb(148 163 184) 1px, transparent 0)`,
+            backgroundSize: '40px 40px',
+          }}
+        />
       </div>
 
       <div className="relative z-10 w-full px-6 lg:px-12 xl:px-20">
@@ -78,13 +70,13 @@ export default function Services({ translations }: ServicesProps) {
           className="text-center mb-16 lg:mb-20"
         >
           <span className="inline-block px-4 py-1.5 mb-6 text-xs font-semibold tracking-widest uppercase text-cyan-600 bg-cyan-50 border border-cyan-200 dark:text-cyan-400 dark:bg-cyan-400/10 dark:border-cyan-400/20 rounded-full">
-            {translations.services.badge}
+            {t.services.badge}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-slate-900 dark:text-white mb-6 tracking-tight">
-            {translations.services.title}
+            {t.services.title}
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-            {translations.services.subtitle}
+            {t.services.subtitle}
           </p>
         </motion.div>
 
@@ -98,7 +90,7 @@ export default function Services({ translations }: ServicesProps) {
         >
           {services.map((service) => {
             const Icon = service.icon;
-            const cardData = translations.services.cards[service.key as keyof typeof translations.services.cards];
+            const cardData = t.services.cards[service.key];
             return (
               <motion.div
                 key={service.key}
@@ -107,25 +99,27 @@ export default function Services({ translations }: ServicesProps) {
                 className="group relative p-8 rounded-2xl bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-slate-300 dark:hover:border-slate-500/50 hover:shadow-2xl hover:shadow-cyan-500/20 dark:hover:shadow-cyan-500/10"
               >
                 {/* Glow Effect on Hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
-                
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
+                />
+
                 {/* Icon */}
-                <div className={`relative w-14 h-14 mb-6 rounded-xl bg-gradient-to-br ${service.gradient} p-0.5`}>
-                  <div className="w-full h-full rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                    <Icon className="w-7 h-7 text-white" strokeWidth={1.5} />
-                  </div>
+                <div
+                  className={`relative w-14 h-14 mb-6 rounded-xl bg-gradient-to-br ${service.gradient} p-3.5`}
+                >
+                  <Icon className="w-full h-full text-white" strokeWidth={1.5} />
                 </div>
 
                 {/* Content */}
                 <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-3 group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors duration-300">
                   {cardData.title}
                 </h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-                  {cardData.desc}
-                </p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{cardData.desc}</p>
 
                 {/* Corner Accent */}
-                <div className={`absolute -bottom-8 -right-8 w-24 h-24 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500`} />
+                <div
+                  className={`absolute -bottom-8 -right-8 w-24 h-24 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500`}
+                />
               </motion.div>
             );
           })}

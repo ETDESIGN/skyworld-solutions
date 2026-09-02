@@ -31,3 +31,4 @@ coverage/
 *.tgz
 .cache/
 .vercel
+dist-ssr/

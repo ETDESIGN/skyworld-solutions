@@ -3,10 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skyworld Solutions</title>
-    <link rel="icon" type="image/png" href="https://skyworld-solutions.com/IMAGES/SWS_logo.png" />
-    <link rel="preconnect" href="https://skyworld-solutions.com" />
-    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+    <title>Skyworld Solutions | Precision Engineering & Manufacturing</title>
+    <meta
+      name="description"
+      content="International engineering company specializing in 5-axis CNC prototyping, precision machining and manufacturing. Serving European markets since 2010."
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0f172a" />
+    <script>
+      // Pre-paint theme + language to avoid flashes (runs before React).
+      (function () {
+        try {
+          var theme = localStorage.getItem('sws_theme');
+          var dark =
+            theme === 'dark' ||
+            ((!theme || theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+          else document.documentElement.classList.add('light');
+          if (window.location.pathname.indexOf('/fr') === 0) {
+            document.documentElement.lang = 'fr';
+          }
+        } catch (e) {
+          /* noop */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

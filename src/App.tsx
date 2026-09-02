@@ -1,70 +1,47 @@
-import { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { translations } from './i18n/translations';
 import { ThemeContext } from './utils/themeContext';
 import { useTheme } from './utils/useTheme';
-import Navbar from './sections/Navbar';
-import Hero from './sections/Hero';
-import Services from './sections/Services';
-import Projects from './sections/Projects';
-import About from './sections/About';
-import Contact from './sections/Contact';
-import FAQ from './sections/FAQ';
-import Footer from './sections/Footer';
-import CookieBanner from './components/CookieBanner';
+import Landing from './Landing';
+import LegalPage, { type LegalKind } from './pages/LegalPage';
+import NotFound from './pages/NotFound';
 
-function App() {
-  const theme = useTheme();
-  const [language, setLanguage] = useState<'en' | 'fr'>(() => {
-    const saved = localStorage.getItem('sws_language');
-    return (saved === 'en' || saved === 'fr') ? saved : 'en';
-  });
+function ScrollToTop() {
+  const { pathname } = useLocation();
   useEffect(() => {
-    document.documentElement.lang = language;
-    localStorage.setItem('sws_language', language);
-  }, [language]);
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
-  const currentTranslations = translations[language];
+const KINDS: LegalKind[] = ['privacy', 'terms', 'legal'];
 
+/** Route tree shared by the browser app and the prerender entry. */
+export function AppRoutes() {
+  const theme = useTheme();
   return (
     <ThemeContext.Provider value={theme}>
-      <div className="min-h-screen bg-white dark:bg-slate-50">
-        <Helmet>
-          <title>{currentTranslations.seo.title}</title>
-          <meta name="description" content={currentTranslations.seo.description} />
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://skyworld-solutions.com/" />
-          <meta property="og:title" content={currentTranslations.seo.title} />
-          <meta property="og:description" content={currentTranslations.seo.description} />
-          <meta property="og:image" content="https://skyworld-solutions.com/IMAGES/001.jpg" />
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:url" content="https://skyworld-solutions.com/" />
-          <meta property="twitter:title" content={currentTranslations.seo.title} />
-          <meta property="twitter:description" content={currentTranslations.seo.description} />
-          <meta property="twitter:image" content="https://skyworld-solutions.com/IMAGES/001.jpg" />
-          <link rel="canonical" href="https://skyworld-solutions.com/" />
-        </Helmet>
-        <a href="#home" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-cyan-500 focus:text-white focus:rounded-lg">
-          Skip to content
-        </a>
-        <Navbar
-          language={language}
-          setLanguage={setLanguage}
-          translations={currentTranslations}
-        />
-        <main id="main-content">
-          <Hero translations={currentTranslations} />
-          <Services translations={currentTranslations} />
-          <Projects translations={currentTranslations} />
-          <About translations={currentTranslations} />
-          <Contact translations={currentTranslations} />
-          <FAQ translations={currentTranslations} />
-        </main>
-        <Footer translations={currentTranslations} />
-        <CookieBanner translations={currentTranslations} />
-      </div>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Landing language="en" t={translations.en} />} />
+        <Route path="/fr" element={<Landing language="fr" t={translations.fr} />} />
+        {KINDS.map((kind) => (
+          <Route key={kind} path={`/${kind}`} element={<LegalPage kind={kind} language="en" />} />
+        ))}
+        {KINDS.map((kind) => (
+          <Route key={`${kind}-fr`} path={`/fr/${kind}`} element={<LegalPage kind={kind} language="fr" />} />
+        ))}
+        <Route path="*" element={<NotFound language="en" homePath="/" />} />
+      </Routes>
     </ThemeContext.Provider>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
+}

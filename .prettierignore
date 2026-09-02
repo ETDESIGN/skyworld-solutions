@@ -1,0 +1,9 @@
+dist/
+dist-ssr/
+node_modules/
+package-lock.json
+public/images/
+*.png
+*.jpg
+*.webp
+*.ico

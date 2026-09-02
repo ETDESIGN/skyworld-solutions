@@ -52,7 +52,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
               An unexpected error occurred. Our team has been notified.
             </p>
 
-            {/* Error details (collapsed) */}
+            {/* Error details (collapsed, full stack in dev only) */}
             {this.state.error && (
               <details className="mb-8 text-left">
                 <summary className="text-sm text-slate-500 dark:text-slate-500 cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
@@ -60,7 +60,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
                 </summary>
                 <pre className="mt-2 p-4 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-300 overflow-auto max-h-40 border border-slate-200 dark:border-slate-700/50">
                   {this.state.error.message}
-                  {this.state.error.stack && `\n\n${this.state.error.stack}`}
+                  {import.meta.env.DEV && this.state.error.stack && `\n\n${this.state.error.stack}`}
                 </pre>
               </details>
             )}
